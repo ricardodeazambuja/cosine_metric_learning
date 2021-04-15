@@ -4,7 +4,7 @@ import os
 import numpy as np
 import scipy.io as sio
 import train_app
-from datasets import vric
+from datasets import mars
 from datasets import util
 import nets.deep_sort.network_definition as net
 
@@ -12,7 +12,7 @@ import nets.deep_sort.network_definition as net
 IMAGE_SHAPE = 128, 64, 3
 
 
-class VRIC(object):
+class Mars(object):
 
     def __init__(self, dataset_dir, num_validation_y=0.1, seed=1234):
         self._dataset_dir = dataset_dir
@@ -57,7 +57,7 @@ def main():
         "--dataset_dir", help="Path to MARS dataset directory.",
         default="resources/MARS-evaluation-master")
     args = arg_parser.parse_args()
-    dataset = VRIC(args.dataset_dir, num_validation_y=0.1, seed=1234)
+    dataset = Mars(args.dataset_dir, num_validation_y=0.1, seed=1234)
 
     if args.mode == "train":
         train_x, train_y, _ = dataset.read_train()
