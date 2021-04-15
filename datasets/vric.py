@@ -37,8 +37,10 @@ def read_train_test_directory_to_str(directory):
     image_filenames, ids, camera_indices = [], [], []
     for dirname in dirnames:
         filenames = os.listdir(os.path.join(directory, dirname))
-        if len(filenames)<4:
+        if (not len(filenames)) or len(filenames)<4:
           continue
+        if not (len(filenames)%4):
+          filenames = filenames[:len(filenames)-(len(filenames)%4)]
         filenames = [
             f for f in filenames if os.path.splitext(f)[1] == ".jpg"]
         image_filenames += [
