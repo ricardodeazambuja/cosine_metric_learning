@@ -43,7 +43,7 @@ for dir_name in dir_names.values():
 
 for image_name, id_label, cam_label in zip(image_names, id_labels, cam_labels):
     src = os.path.join(base_dir_src, image_name)
-    final_name = dir_names[id_label], dir_names[id_label]+f"{cam_label:03d}.jpg"
+    final_name = dir_names[id_label], dir_names[id_label]+f"{cam_label:03d}_{image_name.split('.')[0]}.jpg"
     dst = os.path.join(base_dir_dst, *final_name)
     id_totals[dir_names[id_label]].append((image_name,final_name))
     try:
