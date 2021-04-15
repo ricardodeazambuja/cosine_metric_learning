@@ -1,6 +1,8 @@
 import glob
 import os
-from shutil import copyfile
+import cv2
+
+IMAGE_SHAPE = 128, 64, 3
 
 dir_type = "train" # train, gallery and probe
 
@@ -47,7 +49,8 @@ for image_name, id_label, cam_label in zip(image_names, id_labels, cam_labels):
     dst = os.path.join(base_dir_dst, *final_name)
     id_totals[dir_names[id_label]].append((image_name,final_name))
     try:
-        copyfile(src, dst)
+        image = cv2.imread(src, cv2.IMREAD_COLOR)
+        cv2.imwrite(dst, cv2.resize(image, IMAGE_SHAPE[:-1]))
     except FileNotFoundError:
         print(src, dst + " => NOT FOUND!")
         pass
