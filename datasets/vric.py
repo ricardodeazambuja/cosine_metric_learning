@@ -6,7 +6,8 @@ import cv2
 # The maximum person ID in  the dataset.
 MAX_LABEL = 2811
 
-#IMAGE_SHAPE = 256, 128, 3 # this value doesn't seem to be used anywhere
+# IMAGE_SHAPE = 256, 128, 3 
+IMAGE_SHAPE = 128, 64, 3
 
 
 def read_train_test_directory_to_str(directory):
@@ -48,7 +49,7 @@ def read_train_test_directory_to_str(directory):
     return image_filenames, ids, camera_indices, [] # the last was for tracklets...
 
 
-def read_train_test_directory_to_image(directory, image_shape=(128, 64)):
+def read_train_test_directory_to_image(directory, image_shape = IMAGE_SHAPE[:2]):
     """Read images in bbox_train/bbox_test directory.
 
     Parameters
@@ -69,9 +70,7 @@ def read_train_test_directory_to_image(directory, image_shape=(128, 64)):
         * One dimensional array of tracklet indices.
 
     """
-    reshape_fn = (
-        (lambda x: x) if image_shape == IMAGE_SHAPE[:2]
-        else (lambda x: cv2.resize(x, image_shape[::-1])))
+    reshape_fn = (lambda x: cv2.resize(x, image_shape[::-1]))
 
     filenames, ids, camera_indices, tracklet_indices = (
         read_train_test_directory_to_str(directory))
@@ -112,7 +111,7 @@ def read_train_split_to_str(dataset_dir):
     return read_train_test_directory_to_str(train_dir)
 
 
-def read_train_split_to_image(dataset_dir, image_shape=(128, 64)):
+def read_train_split_to_image(dataset_dir, image_shape = IMAGE_SHAPE[:2]):
     """Read training images to memory. This consumes a lot of memory.
 
     Parameters
@@ -162,7 +161,7 @@ def read_test_split_to_str(dataset_dir):
     return read_train_test_directory_to_str(test_dir)
 
 
-def read_test_split_to_image(dataset_dir, image_shape=(128, 64)):
+def read_test_split_to_image(dataset_dir, image_shape = IMAGE_SHAPE[:2]):
     """Read test images to memory. This consumes a lot of memory.
 
     Parameters
