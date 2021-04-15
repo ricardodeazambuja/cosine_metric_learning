@@ -39,7 +39,7 @@ def read_train_test_directory_to_str(directory):
         filenames = os.listdir(os.path.join(directory, dirname))
         if (not len(filenames)) or len(filenames)<4:
           continue
-        if not (len(filenames)%4):
+        if not (len(filenames)%4): # train_vric, somewhere, seems to read 4 samples at once...
           filenames = filenames[:len(filenames)-(len(filenames)%4)]
         filenames = [
             f for f in filenames if os.path.splitext(f)[1] == ".jpg"]
