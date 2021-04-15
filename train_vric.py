@@ -20,7 +20,7 @@ class VRIC(object):
         self._seed = seed
 
     def read_train(self):
-        filenames, ids, camera_indices, _ = mars.read_train_split_to_str(
+        filenames, ids, camera_indices, _ = vric.read_train_split_to_str(
             self._dataset_dir)
         train_indices, _ = util.create_validation_split(
             np.asarray(ids, np.int64), self._num_validation_y, self._seed)
@@ -31,7 +31,7 @@ class VRIC(object):
         return filenames, ids, camera_indices
 
     def read_validation(self):
-        filenames, ids, camera_indices, _ = mars.read_train_split_to_str(
+        filenames, ids, camera_indices, _ = vric.read_train_split_to_str(
             self._dataset_dir)
         _, valid_indices = util.create_validation_split(
             np.asarray(ids, np.int64), self._num_validation_y, self._seed)
@@ -52,7 +52,7 @@ class VRIC(object):
 
 
 def main():
-    arg_parser = train_app.create_default_argument_parser("mars")
+    arg_parser = train_app.create_default_argument_parser("vric")
     arg_parser.add_argument(
         "--dataset_dir", help="Path to MARS dataset directory.",
         default="resources/MARS-evaluation-master")
@@ -65,7 +65,7 @@ def main():
             len(train_x), len(np.unique(train_y))))
 
         network_factory = net.create_network_factory(
-            is_training=True, num_classes=mars.MAX_LABEL + 1,
+            is_training=True, num_classes=vric.MAX_LABEL + 1,
             add_logits=args.loss_mode == "cosine-softmax")
         train_kwargs = train_app.to_train_kwargs(args)
         train_app.train_loop(
@@ -77,7 +77,7 @@ def main():
             len(valid_x), len(np.unique(valid_y))))
 
         network_factory = net.create_network_factory(
-            is_training=False, num_classes=mars.MAX_LABEL + 1,
+            is_training=False, num_classes=vric.MAX_LABEL + 1,
             add_logits=args.loss_mode == "cosine-softmax")
         eval_kwargs = train_app.to_eval_kwargs(args)
         train_app.eval_loop(
@@ -87,7 +87,7 @@ def main():
         filenames = dataset.read_test_filenames()
 
         network_factory = net.create_network_factory(
-            is_training=False, num_classes=mars.MAX_LABEL + 1,
+            is_training=False, num_classes=vric.MAX_LABEL + 1,
             add_logits=False, reuse=None)
         features = train_app.encode(
             net.preprocess, network_factory, args.restore_path,
@@ -97,20 +97,20 @@ def main():
             {"features": features})
     elif args.mode == "finalize":
         network_factory = net.create_network_factory(
-            is_training=False, num_classes=mars.MAX_LABEL + 1,
+            is_training=False, num_classes=vric.MAX_LABEL + 1,
             add_logits=False, reuse=None)
         train_app.finalize(
             functools.partial(net.preprocess, input_is_bgr=True),
             network_factory, args.restore_path, image_shape=IMAGE_SHAPE,
-            output_filename="./mars.ckpt")
+            output_filename="./vric.ckpt")
     elif args.mode == "freeze":
         network_factory = net.create_network_factory(
-            is_training=False, num_classes=mars.MAX_LABEL + 1,
+            is_training=False, num_classes=vric.MAX_LABEL + 1,
             add_logits=False, reuse=None)
         train_app.freeze(
             functools.partial(net.preprocess, input_is_bgr=True),
             network_factory, args.restore_path, image_shape=IMAGE_SHAPE,
-            output_filename="./mars.pb")
+            output_filename="./vric.pb")
     else:
         raise ValueError("Invalid mode argument.")
 
