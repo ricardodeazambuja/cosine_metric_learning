@@ -37,14 +37,14 @@ def read_train_test_directory_to_str(directory):
     image_filenames, ids, camera_indices = [], [], []
     for dirname in dirnames:
         filenames = os.listdir(os.path.join(directory, dirname))
-        if len(filenames)==0:
+        if len(filenames)<4:
           continue
         filenames = [
             f for f in filenames if os.path.splitext(f)[1] == ".jpg"]
         image_filenames += [
             os.path.join(directory, dirname, f) for f in filenames]
         ids += [to_label(dirname) for _ in filenames]
-        camera_indices += [int(f.split('.')[0][5:]) for f in filenames]
+        camera_indices += [int(f.split('.')[0][4:7]) for f in filenames]
 
     return image_filenames, ids, camera_indices, [] # the last was for tracklets...
 
